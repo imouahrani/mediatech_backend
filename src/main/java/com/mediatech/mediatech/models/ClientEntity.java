@@ -20,6 +20,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientEntity implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @Id()
     @GeneratedValue
     private Integer id;
