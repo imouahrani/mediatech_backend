@@ -3,7 +3,9 @@ package com.mediatech.mediatech.service;
 import com.mediatech.mediatech.dao.ClientDao;
 import com.mediatech.mediatech.dao.ClientRequestDto;
 import com.mediatech.mediatech.dao.ClientResponseDto;
+import com.mediatech.mediatech.exception.EntityNotFoundException;
 import com.mediatech.mediatech.models.ClientEntity;
+
 import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientResponseDto findById(Integer id) {
-        ClientEntity clientEntity = clientDao.findById(id).orElseThrow(() -> new RuntimeException("Client not found"));
+        ClientEntity clientEntity = clientDao.findById(id).orElseThrow(() -> new EntityNotFoundException("Client not found"));
         return modelMapper.map(clientEntity, ClientResponseDto.class);
     }
 
@@ -55,7 +57,7 @@ public class ClientServiceImpl implements ClientService {
             ClientEntity updated = clientDao.save(clientEntity);
             return modelMapper.map(updated, ClientResponseDto.class);
         } else {
-            throw new NotFoundException("Client Not found");
+            throw new EntityNotFoundException("Client Not Found");
         }
     }
 
