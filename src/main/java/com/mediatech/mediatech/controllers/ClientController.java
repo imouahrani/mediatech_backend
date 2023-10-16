@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class ClientController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ClientResponseDto> save(@RequestBody() ClientRequestDto clientRequestDto) {
+    public ResponseEntity<ClientResponseDto> save(@Valid @RequestBody() ClientRequestDto clientRequestDto) {
         ClientResponseDto clientResponseDto = clientService.save(clientRequestDto);
         return new ResponseEntity<>(clientResponseDto, HttpStatus.CREATED);
     }
@@ -51,7 +52,7 @@ public class ClientController {
     }
 
     @PutMapping("/id/{id}")
-    public ResponseEntity<ClientResponseDto> update(@RequestBody() ClientRequestDto clientRequestDto, @PathVariable() Integer id) throws NotFoundException {
+    public ResponseEntity<ClientResponseDto> update(@Valid @RequestBody() ClientRequestDto clientRequestDto, @PathVariable() Integer id) throws NotFoundException {
         ClientResponseDto clientResponseDto = clientService.update(clientRequestDto, id);
         return ResponseEntity.accepted().body(clientResponseDto);
     }
