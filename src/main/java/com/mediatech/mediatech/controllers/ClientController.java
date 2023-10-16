@@ -3,6 +3,7 @@ package com.mediatech.mediatech.controllers;
 import com.mediatech.mediatech.dao.ClientRequestDto;
 import com.mediatech.mediatech.dao.ClientResponseDto;
 import com.mediatech.mediatech.service.ClientService;
+
 import javassist.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class ClientController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<ClientResponseDto>> getClient() {
+    public ResponseEntity<List<ClientResponseDto>> getClients() {
         return new ResponseEntity<>(clientService.findAll(), HttpStatus.OK);
     }
 
@@ -35,7 +36,6 @@ public class ClientController {
     public ResponseEntity<ClientResponseDto> findById(@PathVariable("id") Integer id) {
         ClientResponseDto clientResponseDto = clientService.findById(id);
         return ResponseEntity.ok(clientResponseDto);
-
     }
 
     @GetMapping("/nom/{nom}")
