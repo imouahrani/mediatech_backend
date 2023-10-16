@@ -4,9 +4,13 @@ import com.mediatech.mediatech.dao.ClientDao;
 import com.mediatech.mediatech.dao.ClientRequestDto;
 import com.mediatech.mediatech.dao.ClientResponseDto;
 import com.mediatech.mediatech.models.ClientEntity;
-
+import javassist.NotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service()
 public class ClientServiceImpl implements ClientService {
@@ -42,10 +46,23 @@ public class ClientServiceImpl implements ClientService {
         clientDao.deleteById(id);
     }
 
-    //TODO update
-    // TODO findAll
     @Override
-    public ClientResponseDto update(ClientRequestDto clientRequestDto, Integer id) {
-        return null;
+    public ClientResponseDto update(ClientRequestDto clientRequestDto, Integer id) throws NotFoundException {
+        Optional<ClientEntity> clientEntityOptional = clientDao.findById(id);
+        if (clientEntityOptional.isPresent()) {
+            ClientEntity clientEntity = modelMapper.map(clientRequestDto, ClientEntity.class);
+            clientEntity.setId(id);
+            ClientEntity updated = clientDao.save(clientEntity);
+            return modelMapper.map(updated, ClientResponseDto.class);
+        } else {
+            throw new NotFoundException("Client Not found");
+        }
+    }
+
+    @Override
+    public List<ClientResponseDto> findAll() {
+        return clientDao.findAll()
+                .stream().map(el -> modelMapper.map(el, ClientResponseDto.class))
+                .collect(Collectors.toList());
     }
 }
